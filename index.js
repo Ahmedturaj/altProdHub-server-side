@@ -94,11 +94,11 @@ async function run() {
             res.send(result);
         })
         // queries post
-        // app.post('/queries', async (req, res) => {
-        //     const queries = req.body;
-        //     const result = await queriesCollections.insertOne(queries);
-        //     res.send(result);
-        // })
+        app.post('/queries', async (req, res) => {
+            const queries = req.body;
+            const result = await queriesCollections.insertOne(queries);
+            res.send(result);
+        })
 
 
 
