@@ -110,7 +110,28 @@ async function run() {
             res.send(result);
         })
 
-
+        // update by put 
+        app.put('/queries/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = req.body;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true }
+            const updateQueries = {
+                $set: {
+                    productName: query.productName,
+                    productBrand: query.productBrand,
+                    productImage: query.productImage,
+                    QueryTitle: query.QueryTitle,
+                    detail: query.detail,
+                    dateTime: query.dateTime,
+                    authorName: query.authorName,
+                    authorEmail: query.authorEmail,
+                    authorImage: query.authorImage,
+                }
+            }
+            const result = await movies.updateOne(filter, updateQueries, options);
+            res.send(result)
+        })
 
 
 
