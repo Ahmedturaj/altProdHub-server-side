@@ -87,10 +87,20 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
-        app.get('/queries/:id', async(req,res)=>{
+        // get query by id
+        app.get('/queries/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await queriesCollections.findOne(query);
+            res.send(result);
+        })
+
+        // get query by email
+        app.get('/myQueries/:email', async (req, res) => {
+            const userEmail = req.params.email;
+            const query = { authorEmail: userEmail };
+            const cursor = queriesCollections.find(query);
+            const result = await cursor.toArray();
             res.send(result);
         })
         // queries post
