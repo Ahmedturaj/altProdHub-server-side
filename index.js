@@ -60,6 +60,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         const queriesCollections = client.db("queriesDB").collection("queries");
+        const usersCollections = client.db("queriesDB").collection("users");
 
 
         // jwt
@@ -129,10 +130,24 @@ async function run() {
                     authorImage: query.authorImage,
                 }
             }
-            const result = await movies.updateOne(filter, updateQueries, options);
+            const result = await queriesCollections.updateOne(filter, updateQueries, options);
             res.send(result)
         })
 
+        // delete
+        app.delete('/queries/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await queriesCollections.deleteOne(query);
+            res.send(result);
+        })
+
+        // user
+        app.post('/users', async (req, res) => {
+            const users = req.body;
+            const result = await usersCollections.insertOne(users);
+            res.send(result)
+        })
 
 
         // Send a ping to confirm a successful connection
