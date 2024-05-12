@@ -61,6 +61,7 @@ async function run() {
         // await client.connect();
         const queriesCollections = client.db("queriesDB").collection("queries");
         const usersCollections = client.db("queriesDB").collection("users");
+        const recommendationCollections = client.db("queriesDB").collection("recommendation");
 
 
         // jwt
@@ -82,6 +83,8 @@ async function run() {
         //     res.clearCookie('token', { maxAge: 0 }).send({ success: true })
         // })
 
+
+        // -----------------QUERIES PART----------------
         // get the queries
         app.get('/queries', async (req, res) => {
             const cursor = queriesCollections.find();
@@ -141,7 +144,42 @@ async function run() {
             const result = await queriesCollections.deleteOne(query);
             res.send(result);
         })
+        // -------------------------x--------------------------
+        // ______________________RECOMMENDATION________________
 
+        // post Recommend
+
+        app.get('/myRecommendation/:email', async(req, res)=>{
+            const queryEmail= req.params.email;
+            const cursor = recommendationCollections.find({recommendationEmail:queryEmail});
+            const result = await cursor.toArray()
+            res.send(result);
+        })
+
+
+        app.get('/recommendation/:id', async (req, res) => {
+            const queryId = req.params.id
+            const cursor = recommendationCollections.find({query_id:queryId});
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+
+        app.post('/recommendation', async (req, res) => {
+            const recommendation = req.body;
+            const result = await recommendationCollections.insertOne(recommendation);
+            res.send(result);
+        })
+
+
+        app.delete('/recommendation/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await recommendationCollections.deleteOne(query);
+            res.send(result);
+        })
+
+        // __________________________x___________________________
         // user
         app.get('/users', async (req, res) => {
             const cursor = usersCollections.find();
