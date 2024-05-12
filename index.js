@@ -155,6 +155,12 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result);
         })
+        app.get('/recommendationForMe/:email', async(req, res)=>{
+            const queryEmail= req.params.email;
+            const cursor = recommendationCollections.find({authorEmail:queryEmail});
+            const result = await cursor.toArray()
+            res.send(result);
+        })
 
 
         app.get('/recommendation/:id', async (req, res) => {
